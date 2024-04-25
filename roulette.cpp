@@ -2,12 +2,14 @@
 #include <cstdlib>
 #include <ctime>
 #include <limits>
+#include <thread> 
+#include <chrono>  
 
 using namespace std;
 
 int balance = 1000;  // Initial virtual currency amount
 
-// Check whether it is red, in which column, and which row
+// Function to check if the number is red, in a specific column, or in a specific row
 bool checkAttributes(int number, string type, int attribute) {
     int reds[] = {1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36};
     if (type == "red") {
@@ -23,27 +25,27 @@ bool checkAttributes(int number, string type, int attribute) {
     return false;
 }
 
-// Get valid integer input
+// Function to get valid integer input
 int getValidIntInput(string prompt) {
     int input;
     while (true) {
         cout << prompt;
         cin >> input;
         if (cin.fail() || input < 0) {
-            cin.clear(); // clear wrong sign
-            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // ignore wrong input
+            cin.clear(); // Clear error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignore incorrect input
             cout << "Invalid input, please try again." << endl;
         } else {
-            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear useless input
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear extra input
             break;
         }
     }
     return input;
 }
 
-// main
+// Main function
 int main() {
-    srand(time(0)); // Initialize the random number generator
+    srand(time(0)); // Initialize random number generator
     int wins = 0, losses = 0;
 
     while (true) {
@@ -80,4 +82,44 @@ int main() {
 
         // Determine win or loss
         bool win = false;
-        if (betType == "number
+        if (betType == "number") {
+            win = (betNumber == result);
+        } else if (betType == "red") {
+            win = checkAttributes(result, "red", 0);
+        } else if (betType == "black") {
+            win = !checkAttributes(result, "red", 0) && result != 0;
+        } else if (betType == "even") {
+            win = (result % 2 == 0) && result != 0;
+        } else if (betType == "odd") {
+            win = (result % 2 != 0);
+        } else if (betType == "low") {
+            win = (result >= 1 && result <= 18);
+        } else if (betType == "high") {
+            win = (result >= 19 && result <= 36);
+        } else if (betType == "column") {
+            win = checkAttributes(result, "column", attribute);
+        } else if (betType == "row") {
+            win = checkAttributes(result, "row", attribute);
+        }
+
+        if (win) {
+            cout << "Congratulations, you won!" << endl;
+            balance += betAmount;
+            wins++;
+        } else {
+            cout << "Sorry, you lost." << endl;
+            balance -= betAmount;
+            losses++;
+        }
+
+        cout << "Current balance: $" << balance << endl;
+        cout << "Total wins: " << wins << " Total losses: " << losses << endl;
+
+        if (balance <= 0) {
+            cout << "You have run out of money. Game over!" << endl;
+            break;
+        }
+    }
+
+    return 0;
+}
