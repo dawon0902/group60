@@ -7,14 +7,14 @@
 using namespace std;
 
 struct Card {
-    string face;  // Name of the card, e.g., "2", "Ace"
-    string suit;  // Suit of the card, e.g., "Hearts", "Spades"
-    int value;    // Point value of the card, e.g., 2 to 10, Jack/Queen/King are 10, Ace is 1 or 11
+    string face;  
+    string suit;  
+    int value;   
 };
 
 class Deck {
 private:
-    vector<Card> cards;  // Deck of cards, contains 52 cards
+    vector<Card> cards;  
 
 public:
     Deck() {
@@ -46,9 +46,9 @@ public:
     }
 };
 
-int getHandValue(const vector<Card>& hand) {
+int gethandvalue(const vector<Card>& hand) {
     int value = 0;
-    int aces = 0;  // Count of Aces in hand
+    int aces = 0;  
 
     // Calculate total point value of hand, counting Aces as 11 initially
     for (const auto& card : hand) {
@@ -67,9 +67,9 @@ int getHandValue(const vector<Card>& hand) {
     return value;
 }
 
-void showHand(const vector<Card>& hand, bool hideSecondCard = false) {
+void showhand(const vector<Card>& hand, bool hidesecondcard = false) {
     for (int i = 0; i < hand.size(); ++i) {
-        if (hideSecondCard && i == 1) {
+        if (hidesecondcard && i == 1) {
             cout << "Hidden Card" << endl;  // Hide dealer's second card
         } else {
             cout << hand[i].face << " of " << hand[i].suit << endl;  // Show card face and suit
@@ -77,17 +77,17 @@ void showHand(const vector<Card>& hand, bool hideSecondCard = false) {
     }
 }
 
-int getValidIntInput(const string& prompt) {
+int getvalidintinput(const string& prompt) {
     int input;
     while (true) {
         cout << prompt;
         cin >> input;
         if (cin.fail() || input <= 0) {
-            cin.clear();  // Clear error state
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Ignore bad input
+            cin.clear(); 
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  
             cout << "Invalid input, please enter a positive number." << endl;
         } else {
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the buffer
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
             return input;
         }
     }
@@ -95,38 +95,38 @@ int getValidIntInput(const string& prompt) {
 
 int main() {
     int balance = 1000; // Start with a balance of 1000
-    char playAgain = 'y';
+    char playagain = 'y';
 
-    while (playAgain == 'y') {
+    while (playagain == 'y') {
         Deck deck;
         deck.shuffle();
 
-        vector<Card> playerHand;
-        vector<Card> dealerHand;
+        vector<Card> playerhand;
+        vector<Card> dealerhand;
 
-        playerHand.push_back(deck.deal());
-        playerHand.push_back(deck.deal());
-        dealerHand.push_back(deck.deal());
-        dealerHand.push_back(deck.deal());
+        playerhand.push_back(deck.deal());
+        playerhand.push_back(deck.deal());
+        dealerhand.push_back(deck.deal());
+        dealerhand.push_back(deck.deal());
 
-        int bet = getValidIntInput("You have $" + to_string(balance) + ". How much would you like to bet? $");
+        int bet = getvalidintinput("You have $" + to_string(balance) + ". How much would you like to bet? $");
 
         while (bet > balance) {
             cout << "You cannot bet more than your current balance. Please try again.\n";
-            bet = getValidIntInput("You have $" + to_string(balance) + ". How much would you like to bet? $");
+            bet = getvalidintinput("You have $" + to_string(balance) + ". How much would you like to bet? $");
         }
 
-        balance -= bet;  // Deduct the bet amount from the balance
+        balance -= bet;  
 
         cout << "Dealer's Hand:" << endl;
-        showHand(dealerHand, true);  // Show dealer's hand with the second card hidden
+        showhand(dealerhand, true);  // Show dealer's hand with the second card hidden
         cout << "\nYour Hand:" << endl;
-        showHand(playerHand);  // Show player's hand
+        showhand(playerhand);  // Show player's hand
 
         char decision;
         do {
-            cout << "Your hand value: " << getHandValue(playerHand) << endl;
-            if (getHandValue(playerHand) > 21) {
+            cout << "Your hand value: " << gethandvalue(playerhand) << endl;
+            if (gethandvalue(playerhand) > 21) {
                 cout << "Bust! You lose." << endl;
                 break;  // Player busts and loses the bet
             }
@@ -134,27 +134,27 @@ int main() {
             cout << "Hit or Stand? (h/s): ";
             cin >> decision;
             if (decision == 'h') {
-                playerHand.push_back(deck.deal());
-                cout << "You drew: " << playerHand.back().face << " of " << playerHand.back().suit << endl;
+                playerhand.push_back(deck.deal());
+                cout << "You drew: " << playerhand.back().face << " of " << playerhand.back().suit << endl;
             }
         } while (decision == 'h');  // Continue to hit until the player chooses to stand
 
-        if (getHandValue(playerHand) <= 21) {
+        if (gethandvalue(playerhand) <= 21) {
             cout << "\nDealer's turn." << endl;
-            showHand(dealerHand);  // Show all dealer's cards
+            showhand(dealerhand);  // Show all dealer's cards
 
-            while (getHandValue(dealerHand) < 17) {
-                dealerHand.push_back(deck.deal());
-                cout << "Dealer drew: " << dealerHand.back().face << " of " << dealerHand.back().suit << endl;
+            while (gethandvalue(dealerhand) < 17) {
+                dealerhand.push_back(deck.deal());
+                cout << "Dealer drew: " << dealerhand.back().face << " of " << dealerhand.back().suit << endl;
             }
 
-            cout << "Dealer's hand value: " << getHandValue(dealerHand) << endl;
-            if (getHandValue(dealerHand) > 21) {
+            cout << "Dealer's hand value: " << gethandvalue(dealerhand) << endl;
+            if (gethandvalue(dealerhand) > 21) {
                 cout << "Dealer busts! You win." << endl;
                 balance += bet * 2;  // Player wins and gets twice the bet amount
-            } else if (getHandValue(dealerHand) > getHandValue(playerHand)) {
+            } else if (gethandvalue(dealerhand) > gethandvalue(playerhand)) {
                 cout << "Dealer wins." << endl;
-            } else if (getHandValue(dealerHand) < getHandValue(playerHand)) {
+            } else if (gethandvalue(dealerhand) < gethandvalue(playerhand)) {
                 cout << "You win!" << endl;
                 balance += bet * 2;  // Player wins and gets twice the bet amount
             } else {
@@ -170,7 +170,7 @@ int main() {
         }
 
         cout << "Do you want to play again? (y/n): ";
-        cin >> playAgain;  // Ask the player if they want to play another round
+        cin >> playagain;  // Ask the player if they want to play another round
     }
 
     return 0;
