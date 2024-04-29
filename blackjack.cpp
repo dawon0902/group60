@@ -93,7 +93,7 @@ int getvalidintinput(const string& prompt) {
     }
 }
 
-int main() {
+int playBlackjack() {
     int balance = 1000; // Start with a balance of 1000
     char playagain = 'y';
 

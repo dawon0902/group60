@@ -44,7 +44,7 @@ int getvalidintinput(string prompt) {
 }
 
 // Main function
-int main() {
+int playRoulette() {
     srand(time(0)); // Initialize random number generator
     int wins = 0, losses = 0;
 
