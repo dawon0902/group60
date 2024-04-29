@@ -11,8 +11,12 @@ Chung Dawon
 Our game is a collection of two mini casino games, including **roulette** and **blackjack**. 
 
 1. Roulette
+   
+
 
    
-3. Blackjack
+2. Blackjack
    
 ## 
+
+## Quick start
