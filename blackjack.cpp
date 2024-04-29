@@ -46,7 +46,7 @@ public:
     }
 };
 
-int gethandvalue(const vector<Card>& hand) {
+int getHandValue(const vector<Card>& hand) {
     int value = 0;
     int aces = 0;  
 
@@ -67,9 +67,9 @@ int gethandvalue(const vector<Card>& hand) {
     return value;
 }
 
-void showhand(const vector<Card>& hand, bool hidesecondcard = false) {
+void showHand(const vector<Card>& hand, bool hideSecondCard = false) {
     for (int i = 0; i < hand.size(); ++i) {
-        if (hidesecondcard && i == 1) {
+        if (hideSecondCard && i == 1) {
             cout << "Hidden Card" << endl;  // Hide dealer's second card
         } else {
             cout << hand[i].face << " of " << hand[i].suit << endl;  // Show card face and suit
@@ -77,7 +77,7 @@ void showhand(const vector<Card>& hand, bool hidesecondcard = false) {
     }
 }
 
-int getvalidintinput(const string& prompt) {
+int getValidIntInput(const string& prompt) {
     int input;
     while (true) {
         cout << prompt;
@@ -95,38 +95,38 @@ int getvalidintinput(const string& prompt) {
 
 int playBlackjack() {
     int balance = 1000; // Start with a balance of 1000
-    char playagain = 'y';
+    char playAgain = 'y';
 
-    while (playagain == 'y') {
+    while (playAgain == 'y') {
         Deck deck;
         deck.shuffle();
 
-        vector<Card> playerhand;
-        vector<Card> dealerhand;
+        vector<Card> playerHand;
+        vector<Card> dealerHand;
 
-        playerhand.push_back(deck.deal());
-        playerhand.push_back(deck.deal());
-        dealerhand.push_back(deck.deal());
-        dealerhand.push_back(deck.deal());
+        playerHand.push_back(deck.deal());
+        playerHand.push_back(deck.deal());
+        dealerHand.push_back(deck.deal());
+        dealerHand.push_back(deck.deal());
 
-        int bet = getvalidintinput("You have $" + to_string(balance) + ". How much would you like to bet? $");
+        int bet = getValidIntInput("You have $" + to_string(balance) + ". How much would you like to bet? $");
 
         while (bet > balance) {
             cout << "You cannot bet more than your current balance. Please try again.\n";
-            bet = getvalidintinput("You have $" + to_string(balance) + ". How much would you like to bet? $");
+            bet = getValidIntInput("You have $" + to_string(balance) + ". How much would you like to bet? $");
         }
 
         balance -= bet;  
 
         cout << "Dealer's Hand:" << endl;
-        showhand(dealerhand, true);  // Show dealer's hand with the second card hidden
+        showHand(dealerHand, true);  // Show dealer's hand with the second card hidden
         cout << "\nYour Hand:" << endl;
-        showhand(playerhand);  // Show player's hand
+        showHand(playerHand);  // Show player's hand
 
         char decision;
         do {
-            cout << "Your hand value: " << gethandvalue(playerhand) << endl;
-            if (gethandvalue(playerhand) > 21) {
+            cout << "Your hand value: " << getHandValue(playerHand) << endl;
+            if (getHandValue(playerHand) > 21) {
                 cout << "Bust! You lose." << endl;
                 break;  // Player busts and loses the bet
             }
@@ -134,27 +134,27 @@ int playBlackjack() {
             cout << "Hit or Stand? (h/s): ";
             cin >> decision;
             if (decision == 'h') {
-                playerhand.push_back(deck.deal());
-                cout << "You drew: " << playerhand.back().face << " of " << playerhand.back().suit << endl;
+                playerHand.push_back(deck.deal());
+                cout << "You drew: " << playerHand.back().face << " of " << playerHand.back().suit << endl;
             }
         } while (decision == 'h');  // Continue to hit until the player chooses to stand
 
-        if (gethandvalue(playerhand) <= 21) {
+        if (getHandValue(playerHand) <= 21) {
             cout << "\nDealer's turn." << endl;
-            showhand(dealerhand);  // Show all dealer's cards
+            showHand(dealerHand);  // Show all dealer's cards
 
-            while (gethandvalue(dealerhand) < 17) {
-                dealerhand.push_back(deck.deal());
-                cout << "Dealer drew: " << dealerhand.back().face << " of " << dealerhand.back().suit << endl;
+            while (getHandValue(dealerHand) < 17) {
+                dealerHand.push_back(deck.deal());
+                cout << "Dealer drew: " << dealerHand.back().face << " of " << dealerHand.back().suit << endl;
             }
 
-            cout << "Dealer's hand value: " << gethandvalue(dealerhand) << endl;
-            if (gethandvalue(dealerhand) > 21) {
+            cout << "Dealer's hand value: " << getHandValue(dealerHand) << endl;
+            if (getHandValue(dealerHand) > 21) {
                 cout << "Dealer busts! You win." << endl;
                 balance += bet * 2;  // Player wins and gets twice the bet amount
-            } else if (gethandvalue(dealerhand) > gethandvalue(playerhand)) {
+            } else if (getHandValue(dealerHand) > getHandValue(playerHand)) {
                 cout << "Dealer wins." << endl;
-            } else if (gethandvalue(dealerhand) < gethandvalue(playerhand)) {
+            } else if (getHandValue(dealerHand) < getHandValue(playerHand)) {
                 cout << "You win!" << endl;
                 balance += bet * 2;  // Player wins and gets twice the bet amount
             } else {
@@ -170,7 +170,7 @@ int playBlackjack() {
         }
 
         cout << "Do you want to play again? (y/n): ";
-        cin >> playagain;  // Ask the player if they want to play another round
+        cin >> playAgain;  // Ask the player if they want to play another round
     }
 
     return 0;
