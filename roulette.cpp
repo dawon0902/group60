@@ -10,7 +10,7 @@ using namespace std;
 int balance = 1000;  // Initial virtual currency amount
 
 // Function to check if the number is red, in a specific column, or in a specific row
-bool checkattributes(int number, string type, int attribute) {
+bool checkAttributes(int number, string type, int attribute) {
     int reds[] = {1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36};
     if (type == "red") {
         for (int red : reds) {
@@ -26,7 +26,7 @@ bool checkattributes(int number, string type, int attribute) {
 }
 
 // Function to get valid integer input
-int getvalidintinput(string prompt) {
+int getValidIntInput(string prompt) {
     int input;
     while (true) {
         cout << prompt;
@@ -52,46 +52,46 @@ int playRoulette() {
         cout << "Welcome to the Roulette Game! Your balance is: $" << balance << endl;
         cout << "Bet types: number, red, black, even, odd, low, high, column, row." << endl;
         cout << "Enter bet type or 'exit' to quit: ";
-        string bettype;
-        cin >> bettype;
-        if (bettype == "exit") break;
+        string betType;
+        cin >> betType;
+        if (betType == "exit") break;
 
         int result = rand() % 37; // Generate a random number between 0 and 36
 
         // Determine win or loss
         bool win = false;
-        if (bettype == "number") {
-            int betnumber = getvalidintinput("Enter the number you want to bet on (0-36): ");
-            win = (betnumber == result);
-        } else if (bettype == "red") {
-            win = checkattributes(result, "red", 0);
-        } else if (bettype == "black") {
-            win = !checkattributes(result, "red", 0) && result != 0;
-        } else if (bettype == "even") {
+        if (betType == "number") {
+            int betNumber = getValidIntInput("Enter the number you want to bet on (0-36): ");
+            win = (betNumber == result);
+        } else if (betType == "red") {
+            win = checkAttributes(result, "red", 0);
+        } else if (betType == "black") {
+            win = !checkAttributes(result, "red", 0) && result != 0;
+        } else if (betType == "even") {
             win = (result % 2 == 0) && result != 0;
-        } else if (bettype == "odd") {
+        } else if (betType == "odd") {
             win = (result % 2 != 0);
-        } else if (bettype == "low") {
+        } else if (betType == "low") {
             win = (result >= 1 && result <= 18);
-        } else if (bettype == "high") {
+        } else if (betType == "high") {
             win = (result >= 19 && result <= 36);
-        } else if (bettype == "column" || bettype == "row") {
+        } else if (betType == "column" || betType == "row") {
             int attribute = 0;
-            string prompt = (bettype == "column") ? "Enter the column (1-3): " : "Enter the row (1-12): ";
-            attribute = getvalidintinput(prompt);
+            string prompt = (betType == "column") ? "Enter the column (1-3): " : "Enter the row (1-12): ";
+            attribute = getValidIntInput(prompt);
 
-            if (bettype == "column") {
-                win = checkattributes(result, "column", attribute);
+            if (betType == "column") {
+                win = checkAttributes(result, "column", attribute);
             } else {
-                win = checkattributes(result, "row", attribute);
+                win = checkAttributes(result, "row", attribute);
             }
         } else { 
             cout << "Error: type again" << endl;
             continue;
         }
 
-        int betamount = getvalidintinput("Enter your bet amount: $");
-        if (betamount > balance) {
+        int betAmount = getValidIntInput("Enter your bet amount: $");
+        if (betAmount > balance) {
             cout << "Insufficient balance. Your bet cannot exceed $" << balance << "." << endl;
             continue;
         }
@@ -108,11 +108,11 @@ int playRoulette() {
 
         if (win) {
             cout << "Congratulations, you won!" << endl;
-            balance += betamount;
+            balance += betAmount;
             wins++;
         } else {
             cout << "Sorry, you lost." << endl;
-            balance -= betamount;
+            balance -= betAmount;
             losses++;
         }
 
