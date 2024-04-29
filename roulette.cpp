@@ -56,33 +56,12 @@ int playRoulette() {
         cin >> bettype;
         if (bettype == "exit") break;
 
-        int betamount = getvalidintinput("Enter your bet amount: $");
-        if (betamount > balance) {
-            cout << "Insufficient balance. Your bet cannot exceed $" << balance << "." << endl;
-            continue;
-        }
-
-        int betnumber = 0, attribute = 0;
-        if (bettype == "number") {
-            betnumber = getvalidintinput("Enter the number you want to bet on (0-36): ");
-        } else if (bettype == "column" || bettype == "row") {
-            string prompt = (bettype == "column") ? "Enter the column (1-3): " : "Enter the row (1-12): ";
-            attribute = getvalidintinput(prompt);
-        }
-
-        // Generate roulette result
         int result = rand() % 37; // Generate a random number between 0 and 36
-        cout << "The roulette wheel is spinning..." << endl;
-        for (int i = 0; i < 10; i++) { // Simple animation loop
-            cout << ".";
-            cout.flush();
-            this_thread::sleep_for(chrono::milliseconds(200));
-        }
-        cout << " The result is: " << result << endl;
 
         // Determine win or loss
         bool win = false;
         if (bettype == "number") {
+            int betnumber = getvalidintinput("Enter the number you want to bet on (0-36): ");
             win = (betnumber == result);
         } else if (bettype == "red") {
             win = checkattributes(result, "red", 0);
@@ -96,11 +75,36 @@ int playRoulette() {
             win = (result >= 1 && result <= 18);
         } else if (bettype == "high") {
             win = (result >= 19 && result <= 36);
-        } else if (bettype == "column") {
-            win = checkattributes(result, "column", attribute);
-        } else if (bettype == "row") {
-            win = checkattributes(result, "row", attribute);
+        } else if (bettype == "column" || bettype == "row") {
+            int attribute = 0;
+            string prompt = (bettype == "column") ? "Enter the column (1-3): " : "Enter the row (1-12): ";
+            attribute = getvalidintinput(prompt);
+
+            if (bettype == "column") {
+                win = checkattributes(result, "column", attribute);
+            } else {
+                win = checkattributes(result, "row", attribute);
+            }
+        } else { 
+            cout << "Error: type again" << endl;
+            continue;
         }
+
+        int betamount = getvalidintinput("Enter your bet amount: $");
+        if (betamount > balance) {
+            cout << "Insufficient balance. Your bet cannot exceed $" << balance << "." << endl;
+            continue;
+        }
+
+        // Generate roulette result
+        cout << "The roulette wheel is spinning..." << endl;
+        for (int i = 0; i < 10; i++) { // Simple animation loop
+            cout << ".";
+            cout.flush();
+            this_thread::sleep_for(chrono::milliseconds(200));
+        }
+        cout << " The result is: " << result << endl;
+
 
         if (win) {
             cout << "Congratulations, you won!" << endl;
