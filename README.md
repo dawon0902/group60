@@ -36,5 +36,5 @@ Roulette is a casino game where players bet on which number or color a ball will
 
 ### Non-standard C/C++ Libraries
 
-<thread> and <chrono>: Used to create a simple delay to simulate the spinning of the roulette wheel, enhancing user experience by providing a visual delay.
+ <thread> and <chrono> : Used to create a simple delay to simulate the spinning of the roulette wheel, enhancing user experience by providing a visual delay.
 
