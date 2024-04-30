@@ -41,5 +41,6 @@ Roulette is a casino game where players bet on which number or color a ball will
 ## Quick Start
 
 Run ```make``` to compile the game.
+
 Do ```./game``` to start the game.
 
